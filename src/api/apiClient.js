@@ -13,7 +13,6 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
-export default apiClient;
 export async function apiFetch(path, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
