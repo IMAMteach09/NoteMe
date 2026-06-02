@@ -8,7 +8,8 @@ export const clearToken = () => localStorage.removeItem('noteMeToken');
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, 
+  
+  baseURL: 'https://noteme-backend-my0y.onrender.com', 
   withCredentials: true,
 });
 
@@ -36,3 +37,4 @@ export async function apiFetch(path, options = {}) {
 
   return data;
 }
+export default apiClient;
