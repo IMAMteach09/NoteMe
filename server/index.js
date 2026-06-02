@@ -38,7 +38,7 @@ app.use((err, req, res, next) => {
 const cors = require('cors');
 
 app.use(cors({
-    origin: 'https://noteme.vercel.app', 
+    origin: 'https://note-me-blue.vercel.app', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
