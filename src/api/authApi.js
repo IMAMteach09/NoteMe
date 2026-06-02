@@ -46,3 +46,4 @@ export async function resetPassword(token, password) {
 export function logout() {
   clearToken();
 }
+

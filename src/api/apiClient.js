@@ -5,7 +5,14 @@ const API_BASE = '';
 export const getToken = () => localStorage.getItem('noteMeToken');
 export const setToken = (token) => localStorage.setItem('noteMeToken', token);
 export const clearToken = () => localStorage.removeItem('noteMeToken');
+import axios from 'axios';
 
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL, 
+  withCredentials: true,
+});
+
+export default apiClient;
 export async function apiFetch(path, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
