@@ -38,7 +38,7 @@ app.use((err, req, res, next) => {
 
 
 app.use(cors({
-    origin: 'https://note-me-blue.vercel.app', 
+    origin: 'https://note-me-iota.vercel.app/', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
