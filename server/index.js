@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import path from 'path';
@@ -10,6 +9,11 @@ import notesRoutes from './routes/notes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://note-me-iota.vercel.app'
+}));
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -37,11 +41,6 @@ app.use((err, req, res, next) => {
 });
 
 
-app.use(cors({
-    origin: 'https://note-me-iota.vercel.app/', 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

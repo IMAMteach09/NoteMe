@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/api/:path*",
+      "destination": "https://noteme-backend-my0y.onrender.com/api/:path*"
     }
   ]
 }
