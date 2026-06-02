@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
 });
-const cors = require('cors');
+
 
 app.use(cors({
     origin: 'https://note-me-blue.vercel.app', 
