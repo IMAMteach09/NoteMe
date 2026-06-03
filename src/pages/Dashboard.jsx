@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   Plus, FileText, Star, Users, Archive, Trash2, Settings, LogOut,
-  Search, Bell, Filter, ArrowUpDown
+  Search, Bell, Filter, ArrowUpDown, Menu, X
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import NewNoteModal from '../components/NewNoteModal';
@@ -13,6 +13,7 @@ import { getNotes, createNote, updateNote, deleteNote } from '../api/notesApi.js
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loadingNotes, setLoadingNotes] = useState(true);
   const [error, setError] = useState('');
@@ -32,6 +33,8 @@ export default function Dashboard() {
     logout();
     navigate('/login');
   };
+
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   useEffect(() => {
     const loadNotes = async () => {
@@ -163,14 +166,33 @@ export default function Dashboard() {
     : 'ME';
 
   return (
-    <div className="flex h-screen bg-[#f8fafe] font-sans text-slate-800">
+    <div className="flex min-h-screen bg-[#f8fafe] font-sans text-slate-800">
+
+      {isSidebarOpen && (
+        <button
+          type="button"
+          aria-label="Close menu overlay"
+          onClick={closeSidebar}
+          className="fixed inset-0 z-30 bg-slate-900/40 md:hidden"
+        />
+      )}
 
       {/* LEFT SIDEBAR */}
-      <aside className="w-64 bg-[#f8fafe] border-r border-slate-200 flex flex-col pt-6 pb-4 px-4 shrink-0">
+      <aside className={`fixed inset-y-0 left-0 z-40 w-72 bg-[#f8fafe] border-r border-slate-200 flex flex-col pt-6 pb-4 px-4 shrink-0 transform transition-transform duration-300 md:sticky md:top-0 md:w-64 md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="px-2 mb-8">
-          <Link to="/">
-            <h1 className="text-2xl font-bold text-blue-600 transition-opacity hover:opacity-80">NoteMe</h1>
-          </Link>
+          <div className="flex items-center justify-between gap-3">
+            <Link to="/" onClick={closeSidebar}>
+              <h1 className="text-2xl font-bold text-blue-600 transition-opacity hover:opacity-80">NoteMe</h1>
+            </Link>
+            <button
+              type="button"
+              onClick={closeSidebar}
+              className="md:hidden inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Profile Card */}
@@ -186,6 +208,7 @@ export default function Dashboard() {
 
         <button
           onClick={() => { setSelectedNote(null); setIsModalOpen(true); }}
+          type="button"
           className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-colors mb-6 shadow-sm"
         >
           <Plus className="w-4 h-4" /> Add New Note
@@ -193,35 +216,40 @@ export default function Dashboard() {
 
         <nav className="flex-1 space-y-1">
           <button
-            onClick={() => setActiveFilter('all')}
+            onClick={() => { setActiveFilter('all'); closeSidebar(); }}
+            type="button"
             className={`w-full flex items-center gap-3 px-3 py-2 font-medium rounded-lg transition-colors ${activeFilter === 'all' ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
           >
             <FileText className="w-4 h-4" /> All Notes
             <span className="ml-auto text-xs bg-slate-200 text-slate-600 rounded-full px-2 py-0.5">{countAll}</span>
           </button>
           <button
-            onClick={() => setActiveFilter('important')}
+            onClick={() => { setActiveFilter('important'); closeSidebar(); }}
+            type="button"
             className={`w-full flex items-center gap-3 px-3 py-2 font-medium rounded-lg transition-colors ${activeFilter === 'important' ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
           >
             <Star className="w-4 h-4" /> Important
             <span className="ml-auto text-xs bg-slate-200 text-slate-600 rounded-full px-2 py-0.5">{countImportant}</span>
           </button>
           <button
-            onClick={() => setActiveFilter('shared')}
+            onClick={() => { setActiveFilter('shared'); closeSidebar(); }}
+            type="button"
             className={`w-full flex items-center gap-3 px-3 py-2 font-medium rounded-lg transition-colors ${activeFilter === 'shared' ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
           >
             <Users className="w-4 h-4" /> Shared
             <span className="ml-auto text-xs bg-slate-200 text-slate-600 rounded-full px-2 py-0.5">{countShared}</span>
           </button>
           <button
-            onClick={() => setActiveFilter('archived')}
+            onClick={() => { setActiveFilter('archived'); closeSidebar(); }}
+            type="button"
             className={`w-full flex items-center gap-3 px-3 py-2 font-medium rounded-lg transition-colors ${activeFilter === 'archived' ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
           >
             <Archive className="w-4 h-4" /> Archived
             <span className="ml-auto text-xs bg-slate-200 text-slate-600 rounded-full px-2 py-0.5">{countArchived}</span>
           </button>
           <button
-            onClick={() => setActiveFilter('trash')}
+            onClick={() => { setActiveFilter('trash'); closeSidebar(); }}
+            type="button"
             className={`w-full flex items-center gap-3 px-3 py-2 font-medium rounded-lg transition-colors ${activeFilter === 'trash' ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
           >
             <Trash2 className="w-4 h-4" /> Trash
@@ -232,12 +260,14 @@ export default function Dashboard() {
         <div className="mt-auto space-y-1 pt-4 border-t border-slate-200">
           <button 
             onClick={() => setIsSettingsOpen(true)}
+            type="button"
             className="w-full flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium rounded-lg transition-colors"
           >
             <Settings className="w-4 h-4" /> Settings
           </button>
           <button
             onClick={handleLogout}
+            type="button"
             className="w-full flex items-center gap-3 px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium rounded-lg transition-colors"
           >
             <LogOut className="w-4 h-4" /> Logout
@@ -247,11 +277,21 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto relative">
-        <header className="h-16 flex items-center justify-between px-8 bg-[#f8fafe] shrink-0 sticky top-0 z-10 border-b border-slate-100">
-          <div className="flex items-center gap-6 text-sm font-medium text-slate-600">
-            <Link to="/features" className="hover:text-blue-600 text-blue-600 border-b-2 border-blue-600 py-5">Features</Link>
-            <Link to="/contact" className="hover:text-blue-600 py-5">Contact</Link>
-            <Link to="/help" className="hover:text-blue-600 py-5">Help</Link>
+        <header className="h-16 flex items-center justify-between px-4 md:px-8 bg-[#f8fafe] shrink-0 sticky top-0 z-20 border-b border-slate-100">
+          <div className="flex items-center gap-3 md:gap-6 text-sm font-medium text-slate-600">
+            <button
+              type="button"
+              onClick={() => setIsSidebarOpen(true)}
+              className="md:hidden inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white p-2 text-slate-700 hover:bg-slate-50"
+              aria-label="Open menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <div className="hidden md:flex items-center gap-6">
+              <Link to="/features" className="hover:text-blue-600 text-blue-600 border-b-2 border-blue-600 py-5">Features</Link>
+              <Link to="/contact" className="hover:text-blue-600 py-5">Contact</Link>
+              <Link to="/help" className="hover:text-blue-600 py-5">Help</Link>
+            </div>
           </div>
 
           <div className="flex items-center gap-4">
@@ -265,11 +305,11 @@ export default function Dashboard() {
                 className="w-64 pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-full text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               />
             </div>
-            <div className="flex items-center gap-3 text-slate-500">
+            <div className="hidden md:flex items-center gap-3 text-slate-500">
               <button className="hover:text-slate-800"><Bell className="w-5 h-5" /></button>
               <button onClick={() => setIsSettingsOpen(true)} className="hover:text-slate-800"><Settings className="w-5 h-5" /></button>
             </div>
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-full px-3 py-1.5">
+            <div className="hidden sm:flex items-center gap-2 bg-white border border-slate-200 rounded-full px-3 py-1.5">
               <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs">
                 {initials}
               </div>
@@ -279,7 +319,7 @@ export default function Dashboard() {
         </header>
 
         {/* Dashboard Dynamic View Layer */}
-        <div className="p-8 flex-1 max-w-7xl mx-auto w-full">
+        <div className="p-4 md:p-8 flex-1 max-w-7xl mx-auto w-full">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
             <div>
               <h2 className="text-3xl font-bold text-slate-900 mb-2">
@@ -453,12 +493,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <footer className="px-8 py-6 border-t border-slate-200 mt-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm bg-white shrink-0">
+        <footer className="px-4 md:px-8 py-6 border-t border-slate-200 mt-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm bg-white shrink-0">
           <div>
             <div className="font-bold text-blue-600 mb-1">NoteMe</div>
             <div className="text-slate-400">© 2026 NoteMe Inc. All rights reserved.</div>
           </div>
-          <div className="flex items-center gap-6 text-slate-500 font-medium">
+          <div className="hidden sm:flex items-center gap-6 text-slate-500 font-medium">
             <Link to="#" className="hover:text-slate-800">Privacy Policy</Link>
             <Link to="#" className="hover:text-slate-800">Terms of Service</Link>
             <Link to="#" className="hover:text-slate-800">Security</Link>
