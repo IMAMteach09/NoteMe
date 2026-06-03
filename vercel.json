@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://noteme-backend-my0y.onrender.com/api/:path*"
+      "destination": "https://noteme-backend-tiiw.onrender.com/api/:path*"
     }
   ]
 }
