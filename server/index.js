@@ -6,14 +6,10 @@ import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import notesRoutes from './routes/notes.js';
+import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const cors = require('cors');
-app.use(cors({
-  origin: 'https://note-me-iota.vercel.app'
-}));
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
@@ -43,6 +39,15 @@ app.use((err, req, res, next) => {
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
+});
+
+server.on('error', (err) => {
+  if (err && err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Free the port or set a different PORT.`);
+    process.exit(1);
+  }
+  console.error(err);
+  process.exit(1);
 });
